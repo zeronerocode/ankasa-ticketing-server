@@ -6,4 +6,4 @@ const admin = require('./Admin/index')
 router
   .use('/admin', admin)
 
-module.exports = router
+module.exports = router;

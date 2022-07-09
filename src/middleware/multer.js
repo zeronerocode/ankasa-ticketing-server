@@ -1,23 +1,21 @@
 const multer = require("multer");
 const path = require("path");
-const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET,
-});
+// const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "ankasa",
-  },
-});
+
+// const storage = new CloudinaryStorage({
+//   cloudinary: cloudinary,
+//   params: {
+//     folder: "ankasa",
+//   },
+// });
+// exports.upload = multer({
+//   storage: multer.diskStorage({}),
+// })
 
 const upload = multer({
-  storage: storage,
+  storage: multer.diskStorage({}),
   limits: { fileSize: 2097152 },
   fileFilter: function (req, file, cb) {
     // Allowed ext

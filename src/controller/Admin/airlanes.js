@@ -36,7 +36,7 @@ const airlanesControler = {
                 const results = {}
                 response(res,results, 401, 'Data doesnt exist')
             }
-            response(res, result, 200, 'success')
+            response(res, result[0], 200, 'success')
         } catch (error) {
             console.log(error);
             next(createError[500]())
@@ -44,6 +44,8 @@ const airlanesControler = {
     },
     newAirlanes: async (req, res, next) =>{
         try {
+            console.log('masuk new airlines');
+            console.log(req.body);
             const { name } = req.body
             const file = req.file
             if(file){
@@ -51,18 +53,19 @@ const airlanesControler = {
             const data = {
                 id: uuidv4(),
                 name,
-                img,
-                is_active:false
+                img: img.secure_url,
+                is_active: 0
             }
-                const result = await newAirlanesWImg(data)
-                response(res, result, 200, 'success')
+                await newAirlanesWImg(data)
+                const {rows: result} = await detailAirlanes(data.id)
+                response(res, result[0], 200, 'success')
             }else{
                 const data = {
                     id: uuidv4(),
                     name,
                     is_active: false
                 }
-                const result = await newAirlanesWOImg(data)
+                const {rows: result} = await newAirlanesWOImg(data)
                 response(res, result, 200, 'success')
             }           
         } catch (error) {
@@ -73,31 +76,18 @@ const airlanesControler = {
     activate: async(req,res,next)=>{
         try {
             const {id} = req.params
-            const {rows} = await detailAirlanes(id)
-            if(rows.is_active){
-                res.status(200).json({
-                    message: 'This Airlanes is already active'
-                })
+            const {rows: [detail]} = await detailAirlanes(id)
+            console.log(detail);
+            if(detail.is_active === 1){
+                console.log('masuk deactivated');
+                await deactivate(id)
+                const {rows: details} = await detailAirlanes(id)
+                response(res, details[0], 200, 'This Airlanes is already inactivated')
             }else{
-                const { rows: result }= await activate(id)
-                response(res, result, 200, 'This Airlanes is already activated')
-            }
-        } catch (error) {
-            console.log(error);
-            next(createError[500]())
-        }
-    },
-    deactivate: async(req,res,next)=>{
-        try {
-            const {id} = req.params
-            const {rows} = await detailAirlanes(id)
-            if(!rows.is_active){
-                res.status(200).json({
-                    message: 'This Airlanes is already inactive'
-                })
-            }else{
-                const { rows: result }= await deactivate(id)
-                response(res, result, 200, 'This Airlanes is inactivated')
+                console.log('masuk activated');
+                await activate(id)
+                const {rows: details} = await detailAirlanes(id)
+                response(res, details[0], 200, 'This Airlanes is already activated')
             }
         } catch (error) {
             console.log(error);
@@ -121,16 +111,18 @@ const airlanesControler = {
                     update_at: new Date()
                 }
                 const { rows: result } = await updateWOImg(data)
-                response(res, result, 200, 'Data has been updated')
+                const {rows} = await detailAirlanes(id)
+                response(res, rows[0], 200, 'Data has been updated without updating image')
             }else{
                 const image = await cloudinary.uploader.upload(req.file.path)
                 const data = {
                     name,
-                    image,
+                    image: image.secure_url,
                     update_at: new Date()
                 }
                 const {rows: result} = await updateWImg(data)
-                response(res, result, 200, 'Data has been updated')
+                const {rows} = await detailAirlanes(id)
+                response(res, rows[0], 200, 'Data has been updated')
             }
         } catch (error) {
             console.log(error);
@@ -147,7 +139,7 @@ const airlanesControler = {
                 })
             }else{
                 await deleteAirlanes(id)
-                response(res, rows, 200, 'Data has been deleted')
+                response(res, rows[0], 200, 'Data has been deleted')
             }
         } catch (error) {
             console.log(error);
