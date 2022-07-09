@@ -4,6 +4,7 @@
   "description": "Ankasa Ticketing Server",
   "main": "index.js",
   "scripts": {
+
     "dev": "nodemon index.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -38,5 +39,13 @@
     "eslint-plugin-n": "^15.2.2",
     "eslint-plugin-promise": "^6.0.0",
     "nodemon": "^2.0.16"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeronerocode/ankasa-ticketing-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zeronerocode/ankasa-ticketing-server/issues"
+  },
+  "homepage": "https://github.com/zeronerocode/ankasa-ticketing-server#readme"
 }

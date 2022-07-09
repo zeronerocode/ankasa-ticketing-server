@@ -7,8 +7,8 @@ const { protect } = require('../middleware/auth.js')
 router
   .post('/register', register)
   .post('/login', login)
-//   .post('/refresh-token', refreshToken)
+  // .post('/refresh-token', refreshToken)
   .get('/', protect, getUsers)
-//   .delete('/:id', deleteUser)
+  // .delete('/:id', deleteUser)
 
 module.exports = router
