@@ -7,19 +7,19 @@ const pool = new Pool({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
-  //   ssl: {
-  //     rejectUnauthorized: false,
-  // }
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-const db = new Pool(pool);
+// const db = new Pool(pool);
 
-db.connect((err) => {
-  if (err) {
-    console.log("Failed to connect database...", err.message);
-    process.exit(1);
-  }
-  console.log("Successfully connect database...");
-});
+// db.connect((err) => {
+//   if (err) {
+//     console.log("Failed to connect database...", err.message);
+//     process.exit(1);
+//   }
+//   console.log("Successfully connect database...");
+// });
 
-module.exports = db;
+module.exports = pool;
