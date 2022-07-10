@@ -11,11 +11,23 @@ const flightsController = {
       const limit = req.query.limit || 2;
       const offset = (page - 1) * limit;
 
-      const result = await flightsModel.getAllProduct(limit, offset);
+      const {
+        transit,
+        airline,
+        sortBy
+      } = req.query
+      // console.log(typeof(transit));
+      // console.log(airline);
+
+      const transitFilter = transit || ''
+      const airlineFilter = airline || ''
+      const sortByFilter = sortBy || ''
+
+      const result = await flightsModel.getAllProduct(limit, offset, transitFilter, airlineFilter, sortByFilter);
 
       const {
         rows: [count],
-      } = await flightsModel.countFlights();
+      } = await flightsModel.countFlights(transitFilter, airlineFilter);
       // console.log('apakah ini jalan');
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -27,7 +39,7 @@ const flightsController = {
         totalPage,
       };
 
-      console.log(result);
+      // console.log(result);
 
       return response(res, result.rows, 200, "get data flights success", pagination);
     } catch (error) {

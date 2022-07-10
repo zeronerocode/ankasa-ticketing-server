@@ -113,7 +113,7 @@ SELECT flights.id, flights.airline_id, flights.departure_city, flights.arrival_c
                   flights.transit, flights.more_transit, flights.lugage, flights.meal, flights.wifi, flights.gate,
                   flights.terminal, flights.price, flights.stock, flights.is_active, airlines.name AS airline_name, airlines.image AS airline_image FROM 
 				  flights INNER JOIN airlines ON flights.airline_id
-                  = airlines.id WHERE flights.stock >= 1 LIMIT 1 OFFSET 0;
+                  = airlines.id WHERE flights.stock >= 1 AND airlines.name = 'Garuda Indonesoa' LIMIT 1 OFFSET 0;
 
 
 
