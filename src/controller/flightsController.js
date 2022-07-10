@@ -1,6 +1,7 @@
 const createError = require("http-errors");
 
 const { response } = require("../helper/response");
+// const { flightDetail } = require("../models/flights");
 const flightsModel = require("../models/flights");
 const errorMessage = new createError.InternalServerError();
 
@@ -11,23 +12,21 @@ const flightsController = {
       const limit = req.query.limit || 2;
       const offset = (page - 1) * limit;
 
-      const {
-        transit,
-        airline,
-        sortBy
-      } = req.query
+      const { transit, airline, sortBy, origin, destination } = req.query;
       // console.log(typeof(transit));
       // console.log(airline);
 
-      const transitFilter = transit || ''
-      const airlineFilter = airline || ''
-      const sortByFilter = sortBy || ''
+      const transitFilter = transit || "";
+      const airlineFilter = airline || "";
+      const sortByFilter = sortBy || "";
+      const originFilter = origin || "";
+      const destinationFilter = destination || "";
 
-      const result = await flightsModel.getAllProduct(limit, offset, transitFilter, airlineFilter, sortByFilter);
+      const result = await flightsModel.getAllProduct(limit, offset, transitFilter, airlineFilter, sortByFilter, originFilter, destinationFilter);
 
       const {
         rows: [count],
-      } = await flightsModel.countFlights(transitFilter, airlineFilter);
+      } = await flightsModel.countFlights(transitFilter, airlineFilter, originFilter, destinationFilter);
       // console.log('apakah ini jalan');
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -47,6 +46,19 @@ const flightsController = {
       next(errorMessage);
     }
   },
+
+  getDetailFlight: async (req, res, next) => {
+    try {
+      const id = req.params.id
+      console.log(id);
+      const {rows} = await flightsModel.flightDetail(id)
+
+      return response(res, rows, 200, "get detail flights success");
+    } catch (error) {
+      console.log(error);
+      next(error)
+    }
+  }
 };
 
 module.exports = flightsController;
