@@ -3,8 +3,8 @@ const pool = require("../config/db");
 const flightsModel = {
   getAllProduct: (limit, offset, transit, airline, sortBy, origin, destination) =>
     new Promise((resolve, reject) => {
-      let sql = `SELECT flights.id, flights.airline_id, flights.departure_time,
-      flights.arrival_time, flights.code, flights.class, flights.departure_date, flights.direct,
+      let sql = `SELECT flights.id, flights.airline_id, to_char(flights.departure_time, 'HH:mm') AS departure_time,
+      to_char(flights.arrival_time, 'HH:mm') AS arrival_time, flights.code, flights.class, flights.departure_date, flights.direct,
       flights.transit, flights.more_transit, flights.lugage, flights.meal, flights.wifi, flights.gate,
       flights.terminal, flights.price, flights.stock, flights.is_active, airlines.name AS airline_name, airlines.image AS airline_image,
       origin.city_name AS origin, destination.city_name AS destination

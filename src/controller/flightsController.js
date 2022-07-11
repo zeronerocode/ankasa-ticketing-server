@@ -1,4 +1,5 @@
 const createError = require("http-errors");
+const moment = require('moment')
 
 const { response } = require("../helper/response");
 // const { flightDetail } = require("../models/flights");
@@ -39,8 +40,14 @@ const flightsController = {
       };
 
       // console.log(result);
+      const newData = result.rows.map((item)=>{
+        return {
+          ...item,
+          departure_date : moment(item.departure_date).format('dddd, d MMMM YYYY')
+        }
+      })
 
-      return response(res, result.rows, 200, "get data flights success", pagination);
+      return response(res, newData, 200, "get data flights success", pagination);
     } catch (error) {
       console.log(error);
       next(errorMessage);
