@@ -4,9 +4,16 @@
   "description": "Ankasa Ticketing Server",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "nodemon index.js"
+=======
+
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> 02fcd15fa89bbebb07a8f91b94338e4d5495fdac
   },
   "keywords": [
     "Express",
