@@ -16,6 +16,25 @@ const bookingsModel = {
             })
     }),
 
+    getCustomerBookings: (id) => new Promise((resolve, reject)=>{
+        pool.query(`
+        SELECT flights.departure_date, to_char(flights.departure_time, 'HH:mm') AS departure_time, origin.city_name AS origin, destination.city_name AS destination, flights.terminal,
+        flights.gate, bookings.id, bookings.payment_status, airlines.name AS airline_name
+        FROM bookings
+        INNER JOIN flights ON flights.id = bookings.flight_id
+        INNER JOIN airlines ON flights.airline_id = airlines.id
+        INNER JOIN countries AS origin ON flights.departure_city = origin.id
+        INNER JOIN countries AS destination on flights.arrival_city = destination.id
+        WHERE bookings.user_id = '${id}'
+        `, (err, result)=>{
+            if(!err){
+                resolve(result)
+            } else {
+                reject(err)
+            }
+        })
+    })
+
 }
 
 module.exports = bookingsModel

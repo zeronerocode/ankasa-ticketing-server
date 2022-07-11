@@ -5,5 +5,6 @@ const router = express.Router();
 
 router
     .post('/', bookingsController.createBooking)
+    .get('/', bookingsController.getCustomerBookings)
 
 module.exports = router
