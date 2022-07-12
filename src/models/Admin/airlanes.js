@@ -4,6 +4,9 @@ const airlanesModule = {
     getAirlanes: (data)=>{
         return pool.query('SELECT * FROM airlines LIMIT $1 OFFSET $2', [data.limit, data.offset])
     },
+    getAirlinesByName: (name) =>{
+        return pool.query('SELECT * FROM airlines WHERE name = $1', [name])
+    },
     detailAirlanes: (data) =>{
         return pool.query('SELECT * FROM airlines WHERE id = $1', [data])
     },

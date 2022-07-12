@@ -36,6 +36,7 @@ const bookingControler = {
     },
     deleteBooking: async(req, res, next) => {
         try {
+            console.log('masuk deleteBooking');
             const {id} = req.params
             const {rows: result, rowCount} = await detailBooking(id)
             if(!rowCount){ 
@@ -43,6 +44,7 @@ const bookingControler = {
                     message: 'data doesnt exist'
                 })
             }else{
+                console.log('masuk else');
                 await deleteBooking(id)
             response(res, result[0], 200, 'data has been deleted')
             }
