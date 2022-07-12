@@ -107,20 +107,22 @@ const airlanesControler = {
             }
             if(!file){
                 const data = {
+                    id,
                     name,
                     update_at: new Date()
                 }
-                const { rows: result } = await updateWOImg(data)
+                await updateWOImg(data)
                 const {rows} = await detailAirlanes(id)
                 response(res, rows[0], 200, 'Data has been updated without updating image')
             }else{
                 const image = await cloudinary.uploader.upload(req.file.path)
                 const data = {
+                    id,
                     name,
                     image: image.secure_url,
                     update_at: new Date()
                 }
-                const {rows: result} = await updateWImg(data)
+                await updateWImg(data)
                 const {rows} = await detailAirlanes(id)
                 response(res, rows[0], 200, 'Data has been updated')
             }
