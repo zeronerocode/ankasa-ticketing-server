@@ -196,6 +196,7 @@
     "json5": "^1.0.1",
     "json-bigint": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.4",
     "jsonfile": "^4.0.0",
     "jwa": "^2.0.0",
     "levn": "^0.4.1",
