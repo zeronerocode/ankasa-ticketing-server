@@ -8,7 +8,7 @@ const insertProfile = async (req, res, next) => {
     try {
         const { username, phone_number, city, address, post_code } = req.body;
         const img = await cloudinary.uploader.upload(req.file.path)
-        const id = "45888b11-749d-4a9c-9155-3c814c9e1180";
+        const id = req.decoded.id;
         const data = {
             username, 
             phone_number, 
@@ -28,7 +28,7 @@ const insertProfile = async (req, res, next) => {
 };
 
 const Profile = async (req, res, next) =>{
-    const id = "45888b11-749d-4a9c-9155-3c814c9e1180";
+    const id = req.decoded.id;
     try {
         const result = await getProfile(id);
         response(res, result.rows, 200, "get data profile") 
