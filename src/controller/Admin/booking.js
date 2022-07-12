@@ -37,9 +37,15 @@ const bookingControler = {
     deleteBooking: async(req, res, next) => {
         try {
             const {id} = req.params
-            const {rows: result} = await detailBooking(id)
-            await deleteBooking(id)
+            const {rows: result, rowCount} = await detailBooking(id)
+            if(!rowCount){ 
+                res.status(200).json({
+                    message: 'data doesnt exist'
+                })
+            }else{
+                await deleteBooking(id)
             response(res, result[0], 200, 'data has been deleted')
+            }
         } catch (error) {
             console.log(error);
             next(createError[500]())
@@ -59,8 +65,9 @@ const bookingControler = {
                 total_payment,
                 updated_at: new Date()
             }
+            console.log(data);
             await updateBooking(data)
-            const {rows: result} = detailBooking(id)
+            const {rows: result} = await detailBooking(id)
             response(res, result[0], 200, 'updated')
         } catch (error) {
             console.log(error);
