@@ -4,8 +4,8 @@ const router = express.Router()
 
 router
 .get('/getbooking', getBooking)
-.get('/detailbooking', detailBooking)
-.put('/editbooking', updateBooking)
-.delete('/deletebooking', deleteBooking)
+.get('/detailbooking/:id', detailBooking)
+.put('/editbooking/:id', updateBooking)
+.delete('/deletebooking/:id', deleteBooking)
 
 module.exports = router
