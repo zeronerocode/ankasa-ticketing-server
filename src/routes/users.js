@@ -8,7 +8,7 @@ router
   .post('/register', register)
   .post('/login', login)
 //   .post('/refresh-token', refreshToken)
-  // .get('/', protect, getUsers)
+// .get('/', protect, getUsers)
 //   .delete('/:id', deleteUser)
 
 module.exports = router

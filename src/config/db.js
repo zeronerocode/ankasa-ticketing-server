@@ -1,6 +1,5 @@
-const { Pool } = require("pg");
-
-// console.log("test");
+require("dotenv").config();
+const {Pool} = require('pg')
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -8,19 +7,19 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
   connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
-  }
-});
+  ssl: {
+    rejectUnauthorized: false,
+}
+})
 
 // const db = new Pool(pool);
 
-pool.connect((err) => {
-  if (err) {
-    console.log("Database not connected");
-  } else {
-    console.log(`Database connected on ${process.env.DB_NAME}`);
-  }
-});
+// db.connect((err) => {
+//   if (err) {
+//     console.log("Failed to connect database...", err.message);
+//     process.exit(1);
+//   }
+//   console.log("Successfully connect database...");
+// });
 
 module.exports = pool;
