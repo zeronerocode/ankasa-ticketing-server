@@ -13,18 +13,19 @@ const flightsController = {
       const limit = req.query.limit || 2;
       const offset = (page - 1) * limit;
 
-      const { transit, airline, sortBy, origin, destination } = req.query;
+      const { transit, airline, sortBy, origin, destination, departure } = req.query;
       // console.log(typeof(transit));
-      // console.log(airline);
+      console.log(airline);
       
       // console.log(transit.split('%'));
       const transitFilter = transit ? transit.split('%') : "";
-      const airlineFilter = airline || "";
+      const airlineFilter = airline ? airline.split('%') : "";
+      const departureFilter = departure ? departure.split('%') : "";
       const sortByFilter = sortBy || "";
       const originFilter = origin || "";
       const destinationFilter = destination || "";
 
-      const result = await flightsModel.getAllProduct(limit, offset, transitFilter, airlineFilter, sortByFilter, originFilter, destinationFilter);
+      const result = await flightsModel.getAllProduct(limit, offset, transitFilter, airlineFilter, sortByFilter, originFilter, destinationFilter, departureFilter);
 
       const {
         rows: [count],
