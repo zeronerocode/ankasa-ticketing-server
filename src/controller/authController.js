@@ -50,6 +50,7 @@ const login = async (req, res, next) => {
     const payload = {
       email: user.email,
       name: user.name,
+      id: user.id
     };
     
     // generate token
