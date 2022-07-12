@@ -165,26 +165,58 @@ const flightsModel = {
       //   sql += ` AND flights.more_transit = ${transit}`;
       // }
 
+      // if (airline) {
+      //   sql += ` AND airlines.name ILIKE '${airline}'`;
+      // }
+
+      let operator = ''
+      console.log(transit);
       if (transit.length > 0) {
+        operator = 'AND'
         for (let i = 0; i < transit.length; i++) {
-          if (Number(transit[i]) && i === 0) {
+          if (transit[i] == 1) {
             // console.log('cek jalan');
             // console.log(typeof(transit[i]));
-            sql += ` AND flights.direct = ${transit[i]}`
-          } else if(Number(transit[i]) && i === 1) {
+            sql += ` ${operator} flights.direct = ${transit[i]}`
+            operator = 'OR'
+          } else if(transit[i] == 2) {
             // op = 'OR'
-            sql += ` AND flights.transit = ${transit[i]}`
+            sql += ` ${operator} flights.transit = ${transit[i] - 1}`
+            operator = 'OR'
           } else {
-            if(Number(transit[i]) && i === 2){
-              sql += ` AND flights.more_transit = ${transit[i]}`
+            if(transit[i] == 3){
+              sql += ` ${operator} flights.more_transit = ${transit[i] - 2}`
+              operator = 'OR'
             }
+
           }
         }
       }
 
-      if (airline) {
-        sql += ` AND airlines.name ILIKE '${airline}'`;
+     
+
+      if (airline.length > 0) {
+        console.log(airline);
+        operator = 'AND'
+        for (let i = 0; i < airline.length; i++) {
+          if (airline[i].toLowerCase() == 'garudaindonesia') {
+            sql += ` ${operator} airlines.name ILIKE '%garuda indonesia%'`
+            operator = 'OR'
+          } else if(airline[i].toLowerCase() == 'airasia') {
+            sql += ` ${operator} airlines.name ILIKE '%air asia%'`
+            operator = 'OR'
+          } else {
+            if(airline[i].toLowerCase() == 'lionair'){
+              sql += ` ${operator} airlines.name ILIKE '%lion air%'`
+              operator = 'OR'
+            }
+
+          }
+        }
+        operator = 'AND'
       }
+
+      
 
       if (origin) {
         sql += ` AND origin.city_name ILIKE '${origin}'`;
