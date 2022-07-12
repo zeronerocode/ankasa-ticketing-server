@@ -2,7 +2,7 @@ const pool = require('../../config/db')
 
 const usersModel = {
     getAllUser: (data) => {
-        return pool.query('SELECT * FROM users LIMIT = $1 OFFSET = $2', [data.limit, data.offset])
+        return pool.query('SELECT * FROM users LIMIT $1 OFFSET $2', [data.limit, data.offset])
     },
     detailUsers: (id) => {
         return pool.query('SELECT * FROM users WHERE id = $1', [id])
