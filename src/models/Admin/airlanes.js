@@ -20,10 +20,10 @@ const airlanesModule = {
         return pool.query('UPDATE airlines SET is_active = 0 WHERE id = $1', [data])
     },
     updateWImg: (data) => {
-        return  pool.query('UPDATE airlines SET name = COALESCE ($1, name), image = COALESCE ($2, image), updated_at = $3', [data.name, data.image, data.update_at])
+        return  pool.query('UPDATE airlines SET name = COALESCE ($1, name), image = COALESCE ($2, image), updated_at = $3 WHERE id = $4', [data.name, data.image, data.update_at, data.id])
     },
     updateWOImg: (data) => {
-        return  pool.query('UPDATE airlines SET name = COALESCE ($1, name), updated_at = $2', [data.name, data.update_at])
+        return  pool.query('UPDATE airlines SET name = COALESCE ($1, name), updated_at = $2 WHERE id = $3', [data.name, data.update_at, data.id])
     },
     deleteAirlanes: (data)=> {
         return pool.query('DELETE FROM airlines WHERE id = $1', [data])
