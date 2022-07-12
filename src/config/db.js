@@ -1,16 +1,25 @@
-const { Pool } = require("pg");
-
-// console.log("test");
+require("dotenv").config();
+const {Pool} = require('pg')
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+//   user: process.env.DB_USER,
+//   host: process.env.DB_HOST,
+//   database: process.env.DB_NAME,
+//   password: process.env.DB_PASSWORD,
+//   port: process.env.DB_PORT,
+//   ssl: {
+//     rejectUnauthorized: false,
+//   },
+// });
+  user: 'd1jejlc9f9ihrv',
+  host: 'ec2-44-195-162-77.compute-1.amazonaws.com',
+  database: 'veksikcdninjtz',
+  password: 'f5231ea69c5fca23c3e963df4cec385de4f7d7d1c3d6f3d2e33329e1ca912cdb',
+  port: 5432,
+  connectionString: 'postgres://veksikcdninjtz:f5231ea69c5fca23c3e963df4cec385de4f7d7d1c3d6f3d2e33329e1ca912cdb@ec2-44-195-162-77.compute-1.amazonaws.com:5432/d1jejlc9f9ihrv',
   ssl: {
     rejectUnauthorized: false,
-  },
-});
+}
+})
 
 // const db = new Pool(pool);
 

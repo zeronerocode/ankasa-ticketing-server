@@ -18,8 +18,8 @@ const flightsController = {
       // console.log(airline);
       // console.log(req.query.facilitas);
       // const fasilitas = req.query.facilitas.split('%');
-
-      const transitFilter = transit || "";
+      // console.log(transit.split('%'));
+      const transitFilter = transit ? transit.split('%') : "";
       const airlineFilter = airline || "";
       const sortByFilter = sortBy || "";
       const originFilter = origin || "";
