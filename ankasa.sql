@@ -140,7 +140,12 @@ SELECT flights.id, flights.airline_id, flights.departure_time,
 
 
 
-INSERT INTO users (id, username, email, password, name, phone_number, city, address, post_code, photo, is_active, level, created_at, updated_at) VALUES ('c39c53c6-ee87-447b-8c5f-9d11ce007ceb', 'Master Programmer', 'masterprogrammer123@gmail.com', '$2b$10$qGutdwxWCYMKhYidnZDjPO/3e7glh4ptB1ZbqUM4bkM2sq1ZwD92K', NULL, NULL, NULL, NULL, NULL, '1651749321000.png', NULL, 1, 0, '2022-05-03 11:45:24.934934', '2022-05-05 18:15:21.673757');
+INSERT INTO users (id, username, email, password, name, phone_number,
+				city, address, post_code, photo, is_active) VALUES 
+				('user_2', 
+			'Roma@', 'Roma@gmail.com', 
+			'12345K', 
+			'Roma Sahaja', NULL, NULL, NULL, NULL, '', true);
 
 
 
