@@ -49,6 +49,26 @@ const bookingsController = {
             console.log(error);
             next(errorMessage) 
         }
+    },
+
+    getDetailBooiking: async (req, res, next) => {
+        try {
+            const id = req.params.id
+            const result = await bookingsModel.getDetailBooking(id)
+
+            const newData = result.rows.map((item)=>{
+                return {
+                    ...item,
+                    departure_date: moment(item.departure_date).format('d MMMM YYYY'),
+                    code: item.terminal + '-' + item.gate
+                }
+            })
+
+            response(res, newData, 200, 'GET Detail Success')
+        } catch (error) {
+            console.log(error);
+            next(errorMessage)
+        }
     }
 }
 

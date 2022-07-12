@@ -33,6 +33,25 @@ const bookingsModel = {
                 reject(err)
             }
         })
+    }),
+
+    getDetailBooking: (id) => new Promise((resolve, reject)=>{
+        pool.query(
+            `SELECT bookings.full_name, flights.departure_date, to_char(flights.departure_time, 'HH:mm') AS departure_time,
+            flights.gate, flights.class, flights.terminal, bookings.totalorder, origin.city_name AS origin, destination.city_name AS destination,
+            airlines.image FROM bookings
+            INNER JOIN flights ON bookings.flight_id = flights.id
+            INNER JOIN airlines ON flights.airline_id = airlines.id
+            INNER JOIN countries AS origin ON flights.departure_city = origin.id
+            INNER JOIN countries AS destination ON flights.arrival_city = destination.id WHERE bookings.id ='${id}'`
+            , (err, result)=>{
+                if(!err) {
+                    resolve(result)
+                } else {
+                    reject(err)
+                }
+            }
+        )
     })
 
 }
