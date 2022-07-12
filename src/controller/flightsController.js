@@ -16,8 +16,9 @@ const flightsController = {
       const { transit, airline, sortBy, origin, destination } = req.query;
       // console.log(typeof(transit));
       // console.log(airline);
-
-      const transitFilter = transit || "";
+      
+      // console.log(transit.split('%'));
+      const transitFilter = transit ? transit.split('%') : "";
       const airlineFilter = airline || "";
       const sortByFilter = sortBy || "";
       const originFilter = origin || "";
