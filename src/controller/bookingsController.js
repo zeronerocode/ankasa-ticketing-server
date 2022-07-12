@@ -14,7 +14,7 @@ const bookingsController = {
             const setData = {
                 id,
                 flight_id: req.body.flight_id,
-                user_id: 'user_2',
+                user_id: req.decoded.id || 'user_2',
                 title: req.body.title,
                 fullname: req.body.fullname,
                 nationality: req.body.nationality,
@@ -35,7 +35,7 @@ const bookingsController = {
 
     getCustomerBookings: async (req, res, next) => {
         try {
-            const userId = 'ristUser'
+            const userId = req.decoded.id || 'ristUser'
             const bookings = await bookingsModel.getCustomerBookings(userId)
             const newData = bookings.rows.map((item)=>{
                 return {
