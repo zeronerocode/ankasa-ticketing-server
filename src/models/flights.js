@@ -3,9 +3,9 @@ const pool = require("../config/db");
 // let op = 'AND';
 
 const flightsModel = {
-  getAllProduct: (limit, offset, transit, airline, sortBy, origin, destination, departure, arrival, fasilitas, price) =>
+  getAllProduct: (limit, offset, transit, airline, sortBy, origin, destination, departure, arrival, fasilitas, price, type) =>
     new Promise((resolve, reject) => {
-      let sql = `SELECT flights.id, flights.airline_id, flights.departure_time,
+      let sql = `SELECT flights.id, flights.airline_id, flights.departure_time, flights.duration,
       flights.arrival_time, flights.code, flights.class, flights.departure_date, flights.direct,
       flights.transit, flights.more_transit, flights.lugage, flights.meal, flights.wifi, flights.gate,
       flights.terminal, flights.price, flights.stock, flights.is_active, airlines.name AS airline_name, airlines.image AS airline_image,
@@ -145,6 +145,10 @@ const flightsModel = {
         operator = 'AND'
       }
 
+      if (type) {
+        sql += ` AND flights.class ILIKE '${type}'`;
+      }
+
       // if(price.length > 0){
       //   console.log([price]);
       //   operator = 'AND'
@@ -177,7 +181,7 @@ const flightsModel = {
       });
     }),
   flightDetail: (id) => new Promise((resolve, reject) => {
-    let sql = `SELECT flights.id, flights.airline_id, flights.departure_time,
+    let sql = `SELECT flights.id, flights.airline_id, flights.departure_time, flights.duration,
       flights.arrival_time, flights.code, flights.class, flights.departure_date, flights.direct,
       flights.transit, flights.more_transit, flights.lugage, flights.meal, flights.wifi, flights.gate,
       flights.terminal, flights.price, flights.stock, flights.is_active, airlines.name AS airline_name, airlines.image AS airline_image,
@@ -197,7 +201,7 @@ const flightsModel = {
     })
   })
   ,
-  countFlights: (transit, airline, origin, destination, departure, arrival, fasilitas, price) =>
+  countFlights: (transit, airline, origin, destination, departure, arrival, fasilitas, price, type) =>
     new Promise((resolve, reject) => {
       let sql = `SELECT COUNT(*) AS total FROM flights 
       INNER JOIN airlines ON flights.airline_id = airlines.id
@@ -341,7 +345,9 @@ const flightsModel = {
       //   sql += ` ${operator} flights.price BETWEEN ${price[0]} AND ${price[1]}`
       // }
 
-
+      if (type) {
+        sql += ` AND flights.class ILIKE '${type}'`;
+      }
 
       if (origin) {
         sql += ` AND origin.city_name ILIKE '${origin}'`;
