@@ -3,10 +3,10 @@ const pool = require("../config/db");
 // let op = 'AND';
 
 const flightsModel = {
-  getAllProduct: (limit, offset, transit, airline, sortBy, origin, destination, departure) =>
+  getAllProduct: (limit, offset, transit, airline, sortBy, origin, destination, departure, arrival, fasilitas, price) =>
     new Promise((resolve, reject) => {
-      let sql = `SELECT flights.id, flights.airline_id, to_char(flights.departure_time, 'HH:mm') AS departure_time,
-      to_char(flights.arrival_time, 'HH:mm') AS arrival_time, flights.code, flights.class, flights.departure_date, flights.direct,
+      let sql = `SELECT flights.id, flights.airline_id, flights.departure_time,
+      flights.arrival_time, flights.code, flights.class, flights.departure_date, flights.direct,
       flights.transit, flights.more_transit, flights.lugage, flights.meal, flights.wifi, flights.gate,
       flights.terminal, flights.price, flights.stock, flights.is_active, airlines.name AS airline_name, airlines.image AS airline_image,
       origin.city_name AS origin, destination.city_name AS destination
@@ -26,7 +26,7 @@ const flightsModel = {
       //   sql += ` AND flights.more_transit = ${1}`;
       // }
 
-       // if (airline) {
+      // if (airline) {
       //   sql += ` AND airlines.name ILIKE '${airline}'`;
       // }
 
@@ -40,12 +40,12 @@ const flightsModel = {
             // console.log(typeof(transit[i]));
             sql += ` ${operator} flights.direct = ${transit[i]}`
             operator = 'OR'
-          } else if(transit[i] == 2) {
+          } else if (transit[i] == 2) {
             // op = 'OR'
             sql += ` ${operator} flights.transit = ${transit[i] - 1}`
             operator = 'OR'
           } else {
-            if(transit[i] == 3){
+            if (transit[i] == 3) {
               sql += ` ${operator} flights.more_transit = ${transit[i] - 2}`
               operator = 'OR'
             }
@@ -61,11 +61,11 @@ const flightsModel = {
           if (airline[i].toLowerCase() == 'garudaindonesia') {
             sql += ` ${operator} airlines.name ILIKE '%garuda indonesia%'`
             operator = 'OR'
-          } else if(airline[i].toLowerCase() == 'airasia') {
+          } else if (airline[i].toLowerCase() == 'airasia') {
             sql += ` ${operator} airlines.name ILIKE '%air asia%'`
             operator = 'OR'
           } else {
-            if(airline[i].toLowerCase() == 'lionair'){
+            if (airline[i].toLowerCase() == 'lionair') {
               sql += ` ${operator} airlines.name ILIKE '%lion air%'`
               operator = 'OR'
             }
@@ -75,29 +75,82 @@ const flightsModel = {
         operator = 'AND'
       }
 
-      // if (departure.length > 0) {
-      //   console.log(airline);
-      //   operator = 'AND'
-      //   for (let i = 0; i < airline.length; i++) {
-      //     if (airline[i] == 'dinihari') {
-      //       sql += ` ${operator} flights.departure ILIKE '%garuda indonesia%'`
-      //       operator = 'OR'
-      //     } else if(airline[i].toLowerCase() == 'airasia') {
-      //       sql += ` ${operator} airlines.name ILIKE '%air asia%'`
-      //       operator = 'OR'
-      //     } else {
-      //       if(airline[i].toLowerCase() == 'lionair'){
-      //         sql += ` ${operator} airlines.name ILIKE '%lion air%'`
-      //         operator = 'OR'
-      //       }
+      if (fasilitas.length > 0) {
+        console.log(fasilitas);
+        operator = 'AND'
+        for (let i = 0; i < fasilitas.length; i++) {
+          if (fasilitas[i] == 1) {
+            sql += ` ${operator} flights.lugage = ${fasilitas[i]}`
+            // operator = 'OR'
+          } else if (fasilitas[i] == 2) {
+            // op = 'OR'
+            sql += ` ${operator} flights.meal = ${fasilitas[i] - 1}`
+            // operator = 'OR'
+          } else {
+            if (fasilitas[i] == 3) {
+              sql += ` ${operator} flights.wifi = ${fasilitas[i] - 2}`
+              // operator = 'OR'
+            }
 
-      //     }
-      //   }
+          }
+        }
+      }
+
+
+      if (departure.length > 0) {
+        // console.log(departure);
+        operator = 'AND'
+        for (let i = 0; i < departure.length; i++) {
+          if (departure[i] == 'dinihari') {
+            sql += ` ${operator}  flights.departure_time BETWEEN '00:00:00' AND '06:00:00'`
+            operator = 'OR'
+          } else if (departure[i] == 'pagi') {
+            sql += ` ${operator} flights.departure_time BETWEEN '06:00:00' AND '12:00:00'`
+            operator = 'OR'
+          } else if (departure[i] == 'sore') {
+            sql += ` ${operator} flights.departure_time BETWEEN '12:00:00' AND '18:00:00'`
+            operator = 'OR'
+          } else {
+            if (departure[i] == 'malam') {
+              sql += ` ${operator} flights.departure_time BETWEEN '18:00:00' AND '24:00:00'`
+              operator = 'OR'
+            }
+
+          }
+        }
+        operator = 'AND'
+      }
+
+      if (arrival.length > 0) {
+        // console.log(departure);
+        operator = 'AND'
+        for (let i = 0; i < arrival.length; i++) {
+          if (arrival[i] == 'dinihari') {
+            sql += ` ${operator}  flights.arrival_time BETWEEN '00:00:00' AND '06:00:00'`
+            operator = 'OR'
+          } else if (arrival[i] == 'pagi') {
+            sql += ` ${operator} flights.arrival_time BETWEEN '06:00:00' AND '12:00:00'`
+            operator = 'OR'
+          } else if (arrival[i] == 'sore') {
+            sql += ` ${operator} flights.arrival_time BETWEEN '12:00:00' AND '18:00:00'`
+            operator = 'OR'
+          } else {
+            if (arrival[i] == 'malam') {
+              sql += ` ${operator} flights.arrival_time BETWEEN '18:00:00' AND '24:00:00'`
+              operator = 'OR'
+            }
+
+          }
+        }
+        operator = 'AND'
+      }
+
+      // if(price.length > 0){
+      //   console.log([price]);
       //   operator = 'AND'
+      //   sql += ` ${operator} flights.price BETWEEN ${Number(price[0])} AND ${Number(price[1])}`
       // }
 
-     
-     
       // search by destination
       if (origin) {
         sql += ` AND origin.city_name ILIKE '${origin}'`;
@@ -110,8 +163,6 @@ const flightsModel = {
       if (sortBy === "price") {
         sql += ` ORDER BY flights.price`;
       }
-
-      // console.log(sql);
 
       sql += ` LIMIT ${limit} OFFSET ${offset}`;
 
@@ -146,7 +197,7 @@ const flightsModel = {
     })
   })
   ,
-  countFlights: (transit, airline, origin, destination) =>
+  countFlights: (transit, airline, origin, destination, departure, arrival, fasilitas, price) =>
     new Promise((resolve, reject) => {
       let sql = `SELECT COUNT(*) AS total FROM flights 
       INNER JOIN airlines ON flights.airline_id = airlines.id
@@ -179,12 +230,12 @@ const flightsModel = {
             // console.log(typeof(transit[i]));
             sql += ` ${operator} flights.direct = ${transit[i]}`
             operator = 'OR'
-          } else if(transit[i] == 2) {
+          } else if (transit[i] == 2) {
             // op = 'OR'
             sql += ` ${operator} flights.transit = ${transit[i] - 1}`
             operator = 'OR'
           } else {
-            if(transit[i] == 3){
+            if (transit[i] == 3) {
               sql += ` ${operator} flights.more_transit = ${transit[i] - 2}`
               operator = 'OR'
             }
@@ -193,7 +244,7 @@ const flightsModel = {
         }
       }
 
-     
+
 
       if (airline.length > 0) {
         console.log(airline);
@@ -202,11 +253,11 @@ const flightsModel = {
           if (airline[i].toLowerCase() == 'garudaindonesia') {
             sql += ` ${operator} airlines.name ILIKE '%garuda indonesia%'`
             operator = 'OR'
-          } else if(airline[i].toLowerCase() == 'airasia') {
+          } else if (airline[i].toLowerCase() == 'airasia') {
             sql += ` ${operator} airlines.name ILIKE '%air asia%'`
             operator = 'OR'
           } else {
-            if(airline[i].toLowerCase() == 'lionair'){
+            if (airline[i].toLowerCase() == 'lionair') {
               sql += ` ${operator} airlines.name ILIKE '%lion air%'`
               operator = 'OR'
             }
@@ -216,7 +267,81 @@ const flightsModel = {
         operator = 'AND'
       }
 
-      
+      if (fasilitas.length > 0) {
+        console.log(fasilitas);
+        operator = 'AND'
+        for (let i = 0; i < fasilitas.length; i++) {
+          if (fasilitas[i] == 1) {
+            sql += ` ${operator} flights.lugage = ${fasilitas[i]}`
+            // operator = 'OR'
+          } else if (fasilitas[i] == 2) {
+            // op = 'OR'
+            sql += ` ${operator} flights.meal = ${fasilitas[i] - 1}`
+            // operator = 'OR'
+          } else {
+            if (fasilitas[i] == 3) {
+              sql += ` ${operator} flights.wifi = ${fasilitas[i] - 2}`
+              // operator = 'OR'
+            }
+
+          }
+        }
+      }
+
+      if (departure.length > 0) {
+        // console.log(departure);
+        operator = 'AND'
+        for (let i = 0; i < departure.length; i++) {
+          if (departure[i] == 'dinihari') {
+            sql += ` ${operator}  flights.departure_time BETWEEN '00:00:00' AND '06:00:00'`
+            operator = 'OR'
+          } else if (departure[i] == 'pagi') {
+            sql += ` ${operator} flights.departure_time BETWEEN '06:00:00' AND '12:00:00'`
+            operator = 'OR'
+          } else if (departure[i] == 'sore') {
+            sql += ` ${operator} flights.departure_time BETWEEN '12:00:00' AND '18:00:00'`
+            operator = 'OR'
+          } else {
+            if (departure[i] == 'malam') {
+              sql += ` ${operator} flights.departure_time BETWEEN '18:00:00' AND '24:00:00'`
+              operator = 'OR'
+            }
+
+          }
+        }
+        operator = 'AND'
+      }
+
+      if (arrival.length > 0) {
+        // console.log(departure);
+        operator = 'AND'
+        for (let i = 0; i < arrival.length; i++) {
+          if (arrival[i] == 'dinihari') {
+            sql += ` ${operator}  flights.arrival_time BETWEEN '00:00:00' AND '06:00:00'`
+            operator = 'OR'
+          } else if (arrival[i] == 'pagi') {
+            sql += ` ${operator} flights.arrival_time BETWEEN '06:00:00' AND '12:00:00'`
+            operator = 'OR'
+          } else if (arrival[i] == 'sore') {
+            sql += ` ${operator} flights.arrival_time BETWEEN '12:00:00' AND '18:00:00'`
+            operator = 'OR'
+          } else {
+            if (arrival[i] == 'malam') {
+              sql += ` ${operator} flights.arrival_time BETWEEN '18:00:00' AND '24:00:00'`
+              operator = 'OR'
+            }
+
+          }
+        }
+        operator = 'AND'
+      }
+
+      // if(price.length > 0){
+      //   operator = 'AND'
+      //   sql += ` ${operator} flights.price BETWEEN ${price[0]} AND ${price[1]}`
+      // }
+
+
 
       if (origin) {
         sql += ` AND origin.city_name ILIKE '${origin}'`;

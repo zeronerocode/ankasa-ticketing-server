@@ -13,23 +13,56 @@ const flightsController = {
       const limit = req.query.limit || 2;
       const offset = (page - 1) * limit;
 
-      const { transit, airline, sortBy, origin, destination, departure } = req.query;
+      const { 
+        transit,
+        airline,
+        sortBy,
+        origin,
+        destination,
+        departure,
+        arrival,
+        fasilitas,
+        price,
+      } = req.query;
       // console.log(typeof(transit));
-      console.log(airline);
-
+      // console.log(departure);
+      // console.log(airline);
       // console.log(transit.split('%'));
       const transitFilter = transit ? transit.split('%') : "";
       const airlineFilter = airline ? airline.split('%') : "";
       const departureFilter = departure ? departure.split('%') : "";
+      const arriveFilter = arrival ? arrival.split('%') : "";
+      const fasilitasFilter = fasilitas ? fasilitas.split('%') : "";
+      const priceFilter = price ? price : "";
       const sortByFilter = sortBy || "";
       const originFilter = origin || "";
       const destinationFilter = destination || "";
 
-      const result = await flightsModel.getAllProduct(limit, offset, transitFilter, airlineFilter, sortByFilter, originFilter, destinationFilter, departureFilter);
+      const result = await flightsModel.getAllProduct(
+        limit,
+        offset,
+        transitFilter,
+        airlineFilter,
+        sortByFilter,
+        originFilter,
+        destinationFilter,
+        departureFilter,
+        arriveFilter,
+        fasilitasFilter,
+        priceFilter
+        );
 
       const {
         rows: [count],
-      } = await flightsModel.countFlights(transitFilter, airlineFilter, originFilter, destinationFilter);
+      } = await flightsModel.countFlights(transitFilter,
+        airlineFilter,
+        originFilter,
+        destinationFilter,
+        departureFilter,
+        arriveFilter,
+        fasilitasFilter,
+        priceFilter
+        );
       // console.log('apakah ini jalan');
       const totalData = parseInt(count.total);
       const totalPage = Math.ceil(totalData / limit);
@@ -45,6 +78,8 @@ const flightsController = {
       const newData = result.rows.map((item)=>{
         return {
           ...item,
+          departure_time: item.departure_time.split (':').slice(0, 2).join(':'),
+          arrival_time : item.arrival_time.split (':').slice(0, 2).join(':'),
           departure_date : moment(item.departure_date).format('dddd, d MMMM YYYY')
         }
       })
