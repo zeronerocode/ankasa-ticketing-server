@@ -25,8 +25,8 @@ const flightsController = {
         price,
       } = req.query;
       // console.log(typeof(transit));
-      console.log(departure);
-      
+      // console.log(departure);
+      // console.log(airline);
       // console.log(transit.split('%'));
       const transitFilter = transit ? transit.split('%') : "";
       const airlineFilter = airline ? airline.split('%') : "";

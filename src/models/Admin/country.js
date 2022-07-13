@@ -7,6 +7,9 @@ const countryModel = {
     detailCountry: (id) => {
         return pool.query('SELECT * FROM countries WHERE id = $1', [id])
     },
+    detailCountryByName: (name) => {
+        return pool.query('SELECT * FROM countries WHERE city_name = $1', [name])
+    },
     createCountryWImg: (data) => {
         return pool.query('INSERT INTO countries (id, name, alias, city_name, city_image, created_at) VALUES ($1, $2, $3, $4, $5, $6)', [data.id, data.name, data.alias, data.city_name, data.city_image, data.created_at])
     },
