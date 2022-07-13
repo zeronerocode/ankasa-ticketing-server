@@ -10,7 +10,7 @@ const flightsController = {
   getDataFlights: async (req, res, next) => {
     try {
       const page = req.query.page || 1;
-      const limit = req.query.limit || 2;
+      const limit = req.query.limit || 10;
       const offset = (page - 1) * limit;
 
       const { 
@@ -23,6 +23,7 @@ const flightsController = {
         arrival,
         fasilitas,
         price,
+        type
       } = req.query;
       // console.log(typeof(transit));
       // console.log(departure);
@@ -33,6 +34,7 @@ const flightsController = {
       const departureFilter = departure ? departure.split('%') : "";
       const arriveFilter = arrival ? arrival.split('%') : "";
       const fasilitasFilter = fasilitas ? fasilitas.split('%') : "";
+      // const classFilter = type ? type.split('%') : "";
       const priceFilter = price ? price : "";
       const sortByFilter = sortBy || "";
       const originFilter = origin || "";
@@ -49,7 +51,8 @@ const flightsController = {
         departureFilter,
         arriveFilter,
         fasilitasFilter,
-        priceFilter
+        priceFilter,
+        type
         );
 
       const {
@@ -61,7 +64,8 @@ const flightsController = {
         departureFilter,
         arriveFilter,
         fasilitasFilter,
-        priceFilter
+        priceFilter,
+        type
         );
       // console.log('apakah ini jalan');
       const totalData = parseInt(count.total);
