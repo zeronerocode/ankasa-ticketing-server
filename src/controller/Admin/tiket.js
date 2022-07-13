@@ -33,6 +33,7 @@ const flightsControler = {
         terminal,
         price,
         stock,
+        duration
       } = req.body;
       const {
         rows: [countryDep],
@@ -78,6 +79,7 @@ const flightsControler = {
           terminal,
           price,
           stock,
+          duration,
           is_active: 1,
           created_at: new Date(),
         };
@@ -161,6 +163,7 @@ const flightsControler = {
         terminal,
         price,
         stock,
+        duration
       } = req.body;
       const {
         rows: countryDep
@@ -200,6 +203,7 @@ const flightsControler = {
         terminal: terminal || initial.terminal,
         price: price || initial.price,
         stock: stock || initial.stock,
+        duration: duration || initial.duration,
         updated_at: new Date()
       };
       await updateFlights(data)
