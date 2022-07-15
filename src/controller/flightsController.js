@@ -23,22 +23,27 @@ const flightsController = {
         arrival,
         fasilitas,
         price,
-        type
+        type,
+        date,
+        min,
+        max
       } = req.query;
       // console.log(typeof(transit));
       // console.log(departure);
       // console.log(airline);
       // console.log(transit.split('%'));
-      const transitFilter = transit ? transit.split('%') : "";
-      const airlineFilter = airline ? airline.split('%') : "";
-      const departureFilter = departure ? departure.split('%') : "";
-      const arriveFilter = arrival ? arrival.split('%') : "";
-      const fasilitasFilter = fasilitas ? fasilitas.split('%') : "";
-      // const classFilter = type ? type.split('%') : "";
+      const transitFilter = transit ? transit.split('.') : "";
+      const airlineFilter = airline ? airline.split('|') : "";
+      const departureFilter = departure ? departure.split('.') : "";
+      const arriveFilter = arrival ? arrival.split('.') : "";
+      const fasilitasFilter = fasilitas ? fasilitas.split('.') : "";
+      const departureDate = date || 0
       const priceFilter = price ? price : "";
       const sortByFilter = sortBy || "";
       const originFilter = origin || "";
       const destinationFilter = destination || "";
+      const minPrice = min || 0
+      const maxPrice = max || 0
 
       const result = await flightsModel.getAllProduct(
         limit,
@@ -52,7 +57,10 @@ const flightsController = {
         arriveFilter,
         fasilitasFilter,
         priceFilter,
-        type
+        type,
+        departureDate,
+        minPrice,
+        maxPrice
         );
 
       const {
@@ -65,7 +73,10 @@ const flightsController = {
         arriveFilter,
         fasilitasFilter,
         priceFilter,
-        type
+        type,
+        departureDate,
+        minPrice,
+        maxPrice
         );
       // console.log('apakah ini jalan');
       const totalData = parseInt(count.total);
