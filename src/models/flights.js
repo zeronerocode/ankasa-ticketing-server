@@ -3,7 +3,21 @@ const pool = require("../config/db");
 // let op = 'AND';
 
 const flightsModel = {
-  getAllProduct: (limit, offset, transit, airline, sortBy, origin, destination, departure, arrival, fasilitas, price, type) =>
+  getAllProduct: (limit,
+    offset,
+    transit,
+    airline,
+    sortBy,
+    origin,
+    destination,
+    departure,
+    arrival,
+    fasilitas, 
+    price, 
+    type, 
+    date,
+    min,
+    max) =>
     new Promise((resolve, reject) => {
       let sql = `SELECT flights.id, flights.airline_id, flights.departure_time, flights.duration,
       flights.arrival_time, flights.code, flights.class, flights.departure_date, flights.direct,
@@ -61,12 +75,12 @@ const flightsModel = {
           if (airline[i].toLowerCase() == 'garudaindonesia') {
             sql += ` ${operator} airlines.name ILIKE '%garuda indonesia%'`
             operator = 'OR'
-          } else if (airline[i].toLowerCase() == 'airasia') {
-            sql += ` ${operator} airlines.name ILIKE '%air asia%'`
+          } else if (airline[i].toLowerCase() == 'america') {
+            sql += ` ${operator} airlines.name ILIKE '%america%'`
             operator = 'OR'
           } else {
-            if (airline[i].toLowerCase() == 'lionair') {
-              sql += ` ${operator} airlines.name ILIKE '%lion air%'`
+            if (airline[i].toLowerCase() == 'batikair') {
+              sql += ` ${operator} airlines.name ILIKE '%Batik Air%'`
               operator = 'OR'
             }
 
@@ -98,7 +112,7 @@ const flightsModel = {
 
 
       if (departure.length > 0) {
-        // console.log(departure);
+        console.log(departure);
         operator = 'AND'
         for (let i = 0; i < departure.length; i++) {
           if (departure[i] == 'dinihari') {
@@ -149,13 +163,18 @@ const flightsModel = {
         sql += ` AND flights.class ILIKE '${type}'`;
       }
 
-      // if(price.length > 0){
-      //   console.log([price]);
-      //   operator = 'AND'
-      //   sql += ` ${operator} flights.price BETWEEN ${Number(price[0])} AND ${Number(price[1])}`
-      // }
+      if(min && max){
+        // console.log(min);
+        // console.log(max);
+        operator = 'AND'
+        sql += ` ${operator} flights.price BETWEEN ${min} AND ${max}`
+      }
 
       // search by destination
+      if (date) {
+        // console.log(date);
+        sql += ` AND flights.departure_date = '${date}'`
+      }
       if (origin) {
         sql += ` AND origin.city_name ILIKE '${origin}'`;
       }
@@ -201,7 +220,18 @@ const flightsModel = {
     })
   })
   ,
-  countFlights: (transit, airline, origin, destination, departure, arrival, fasilitas, price, type) =>
+  countFlights: (transit,
+    airline, 
+    origin, 
+    destination, 
+    departure, 
+    arrival, 
+    fasilitas, 
+    price, 
+    type,
+    date,
+    min,
+    max) =>
     new Promise((resolve, reject) => {
       let sql = `SELECT COUNT(*) AS total FROM flights 
       INNER JOIN airlines ON flights.airline_id = airlines.id
@@ -257,12 +287,12 @@ const flightsModel = {
           if (airline[i].toLowerCase() == 'garudaindonesia') {
             sql += ` ${operator} airlines.name ILIKE '%garuda indonesia%'`
             operator = 'OR'
-          } else if (airline[i].toLowerCase() == 'airasia') {
-            sql += ` ${operator} airlines.name ILIKE '%air asia%'`
+          } else if (airline[i].toLowerCase() == 'amreica') {
+            sql += ` ${operator} airlines.name ILIKE '%america%'`
             operator = 'OR'
           } else {
-            if (airline[i].toLowerCase() == 'lionair') {
-              sql += ` ${operator} airlines.name ILIKE '%lion air%'`
+            if (airline[i].toLowerCase() == 'batikair') {
+              sql += ` ${operator} airlines.name ILIKE '%Batik Air%'`
               operator = 'OR'
             }
 
@@ -340,13 +370,20 @@ const flightsModel = {
         operator = 'AND'
       }
 
-      // if(price.length > 0){
-      //   operator = 'AND'
-      //   sql += ` ${operator} flights.price BETWEEN ${price[0]} AND ${price[1]}`
-      // }
+      if(min && max){
+        // console.log(min);
+        // console.log(max);
+        operator = 'AND'
+        sql += ` ${operator} flights.price BETWEEN ${min} AND ${max}`
+      }
 
       if (type) {
         sql += ` AND flights.class ILIKE '${type}'`;
+      }
+
+      if (date) {
+        // console.log(date);
+        sql += ` AND flights.departure_date = '${date}'`
       }
 
       if (origin) {
