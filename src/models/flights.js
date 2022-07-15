@@ -13,7 +13,6 @@ const flightsModel = {
     departure,
     arrival,
     fasilitas, 
-    price, 
     type, 
     date,
     min,
@@ -287,7 +286,7 @@ const flightsModel = {
           if (airline[i].toLowerCase() == 'garudaindonesia') {
             sql += ` ${operator} airlines.name ILIKE '%garuda indonesia%'`
             operator = 'OR'
-          } else if (airline[i].toLowerCase() == 'amreica') {
+          } else if (airline[i].toLowerCase() == 'america') {
             sql += ` ${operator} airlines.name ILIKE '%america%'`
             operator = 'OR'
           } else {
