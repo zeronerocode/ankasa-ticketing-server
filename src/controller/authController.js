@@ -22,7 +22,8 @@ const register = async (req, res, next) => {
       id: uuidv4(),
       email,
       password: hashPassword,
-      name
+      name,
+      isActive : false
     };
     await insert(data);
     // sendEmail(email);
@@ -81,9 +82,10 @@ const refreshToken = (req, res) => {
   const decoded = jwt.verify(refreshToken, process.env.SECRET_KEY_JWT);
   const payload = {
     email: decoded.email,
-    role: decoded.role
+    id: decoded.id
   };
   const result = {
+    token: authHelper.generateToken(payload),
     refreshToken: authHelper.gerateRefreshToken(payload)
   };
   response(res, result, 200, "you are successfully logged in");
