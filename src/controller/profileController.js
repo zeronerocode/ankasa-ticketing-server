@@ -31,7 +31,7 @@ const Profile = async (req, res, next) =>{
     const id = req.decoded.id;
     try {
         const result = await getProfile(id);
-        response(res, result.rows, 200, "get data profile") 
+        response(res, result.rows[0], 200, "get data profile") 
     } catch (error) {
         console.log(error);
         next(errorServ);
