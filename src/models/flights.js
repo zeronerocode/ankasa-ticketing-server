@@ -47,50 +47,55 @@ const flightsModel = {
       console.log(transit);
       if (transit.length > 0) {
         operator = 'AND'
+        let kurungBuka = '('
         for (let i = 0; i < transit.length; i++) {
           if (transit[i] == 1) {
             // console.log('cek jalan');
             // console.log(typeof(transit[i]));
-            sql += ` ${operator} flights.direct = ${transit[i]}`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.direct = ${transit[i]}`
             operator = 'OR'
           } else if (transit[i] == 2) {
             // op = 'OR'
-            sql += ` ${operator} flights.transit = ${transit[i] - 1}`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.transit = ${transit[i] - 1}`
             operator = 'OR'
           } else {
             if (transit[i] == 3) {
-              sql += ` ${operator} flights.more_transit = ${transit[i] - 2}`
+              sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.more_transit = ${transit[i] - 2}`
               operator = 'OR'
             }
 
           }
         }
+        sql += `)`
       }
 
       if (airline.length > 0) {
         console.log(airline);
         operator = 'AND'
+        let kurungBuka = '('
         for (let i = 0; i < airline.length; i++) {
           if (airline[i].toLowerCase() == 'garudaindonesia') {
-            sql += ` ${operator} airlines.name ILIKE '%garuda indonesia%'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } airlines.name ILIKE '%garuda indonesia%'`
             operator = 'OR'
           } else if (airline[i].toLowerCase() == 'america') {
-            sql += ` ${operator} airlines.name ILIKE '%america%'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } airlines.name ILIKE '%america%'`
             operator = 'OR'
           } else {
             if (airline[i].toLowerCase() == 'batikair') {
-              sql += ` ${operator} airlines.name ILIKE '%Batik Air%'`
+              sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } airlines.name ILIKE '%Batik Air%'`
               operator = 'OR'
             }
 
           }
         }
         operator = 'AND'
+        sql += ` )`
       }
 
       if (fasilitas.length > 0) {
         console.log(fasilitas);
         operator = 'AND'
+        // sql += `()`
         for (let i = 0; i < fasilitas.length; i++) {
           if (fasilitas[i] == 1) {
             sql += ` ${operator} flights.lugage = ${fasilitas[i]}`
@@ -107,79 +112,84 @@ const flightsModel = {
 
           }
         }
+        // sql += `)`
       }
 
 
       if (departure.length > 0) {
         console.log(departure);
         operator = 'AND'
+        let kurungBuka = '('
         for (let i = 0; i < departure.length; i++) {
           if (departure[i] == 'dinihari') {
-            sql += ` ${operator}  flights.departure_time BETWEEN '00:00:00' AND '06:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' }  flights.departure_time BETWEEN '00:00:00' AND '06:00:00'`
             operator = 'OR'
           } else if (departure[i] == 'pagi') {
-            sql += ` ${operator} flights.departure_time BETWEEN '06:00:00' AND '12:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.departure_time BETWEEN '06:00:00' AND '12:00:00'`
             operator = 'OR'
           } else if (departure[i] == 'sore') {
-            sql += ` ${operator} flights.departure_time BETWEEN '12:00:00' AND '18:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.departure_time BETWEEN '12:00:00' AND '18:00:00'`
             operator = 'OR'
           } else {
             if (departure[i] == 'malam') {
-              sql += ` ${operator} flights.departure_time BETWEEN '18:00:00' AND '24:00:00'`
+              sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.departure_time BETWEEN '18:00:00' AND '24:00:00'`
               operator = 'OR'
             }
 
           }
         }
         operator = 'AND'
+        sql += `)`
       }
 
       if (arrival.length > 0) {
         // console.log(departure);
         operator = 'AND'
+        let kurungBuka = '('
         for (let i = 0; i < arrival.length; i++) {
           if (arrival[i] == 'dinihari') {
-            sql += ` ${operator}  flights.arrival_time BETWEEN '00:00:00' AND '06:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.arrival_time BETWEEN '00:00:00' AND '06:00:00'`
             operator = 'OR'
           } else if (arrival[i] == 'pagi') {
-            sql += ` ${operator} flights.arrival_time BETWEEN '06:00:00' AND '12:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.arrival_time BETWEEN '06:00:00' AND '12:00:00'`
             operator = 'OR'
           } else if (arrival[i] == 'sore') {
-            sql += ` ${operator} flights.arrival_time BETWEEN '12:00:00' AND '18:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.arrival_time BETWEEN '12:00:00' AND '18:00:00'`
             operator = 'OR'
           } else {
             if (arrival[i] == 'malam') {
-              sql += ` ${operator} flights.arrival_time BETWEEN '18:00:00' AND '24:00:00'`
+              sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.arrival_time BETWEEN '18:00:00' AND '24:00:00'`
               operator = 'OR'
             }
 
           }
         }
         operator = 'AND'
+        sql += `)`
       }
 
       if (type) {
-        sql += ` AND flights.class ILIKE '${type}'`;
+        sql += ` AND (flights.class ILIKE '${type}')`;
       }
 
       if(min && max){
         // console.log(min);
         // console.log(max);
         operator = 'AND'
-        sql += ` ${operator} flights.price BETWEEN ${min} AND ${max}`
+        sql += ` ${operator} (flights.price BETWEEN ${min} AND ${max})`
       }
 
       // search by destination
       if (date) {
         // console.log(date);
-        sql += ` AND flights.departure_date = '${date}'`
+        sql += ` AND (flights.departure_date = '${date}')`
       }
       if (origin) {
-        sql += ` AND origin.city_name ILIKE '${origin}'`;
+        sql += ` AND (origin.city_name ILIKE '${origin}')`;
       }
 
       if (destination) {
-        sql += ` AND destination.city_name ILIKE '${destination}'`;
+        sql += ` AND (destination.city_name ILIKE '${destination}')`;
       }
 
       if (sortBy === "price") {
@@ -257,52 +267,55 @@ const flightsModel = {
       console.log(transit);
       if (transit.length > 0) {
         operator = 'AND'
+        let kurungBuka = '('
         for (let i = 0; i < transit.length; i++) {
           if (transit[i] == 1) {
             // console.log('cek jalan');
             // console.log(typeof(transit[i]));
-            sql += ` ${operator} flights.direct = ${transit[i]}`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.direct = ${transit[i]}`
             operator = 'OR'
           } else if (transit[i] == 2) {
             // op = 'OR'
-            sql += ` ${operator} flights.transit = ${transit[i] - 1}`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.transit = ${transit[i] - 1}`
             operator = 'OR'
           } else {
             if (transit[i] == 3) {
-              sql += ` ${operator} flights.more_transit = ${transit[i] - 2}`
+              sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.more_transit = ${transit[i] - 2}`
               operator = 'OR'
             }
 
           }
         }
+        sql += `)`
       }
-
-
 
       if (airline.length > 0) {
         console.log(airline);
         operator = 'AND'
+        let kurungBuka = '('
         for (let i = 0; i < airline.length; i++) {
           if (airline[i].toLowerCase() == 'garudaindonesia') {
-            sql += ` ${operator} airlines.name ILIKE '%garuda indonesia%'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } airlines.name ILIKE '%garuda indonesia%'`
             operator = 'OR'
           } else if (airline[i].toLowerCase() == 'america') {
-            sql += ` ${operator} airlines.name ILIKE '%america%'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } airlines.name ILIKE '%america%'`
             operator = 'OR'
           } else {
             if (airline[i].toLowerCase() == 'batikair') {
-              sql += ` ${operator} airlines.name ILIKE '%Batik Air%'`
+              sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } airlines.name ILIKE '%Batik Air%'`
               operator = 'OR'
             }
 
           }
         }
         operator = 'AND'
+        sql += ` )`
       }
 
       if (fasilitas.length > 0) {
         console.log(fasilitas);
         operator = 'AND'
+        // sql += `()`
         for (let i = 0; i < fasilitas.length; i++) {
           if (fasilitas[i] == 1) {
             sql += ` ${operator} flights.lugage = ${fasilitas[i]}`
@@ -319,78 +332,84 @@ const flightsModel = {
 
           }
         }
+        // sql += `)`
       }
 
+
       if (departure.length > 0) {
-        // console.log(departure);
+        console.log(departure);
         operator = 'AND'
+        let kurungBuka = '('
         for (let i = 0; i < departure.length; i++) {
           if (departure[i] == 'dinihari') {
-            sql += ` ${operator}  flights.departure_time BETWEEN '00:00:00' AND '06:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' }  flights.departure_time BETWEEN '00:00:00' AND '06:00:00'`
             operator = 'OR'
           } else if (departure[i] == 'pagi') {
-            sql += ` ${operator} flights.departure_time BETWEEN '06:00:00' AND '12:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.departure_time BETWEEN '06:00:00' AND '12:00:00'`
             operator = 'OR'
           } else if (departure[i] == 'sore') {
-            sql += ` ${operator} flights.departure_time BETWEEN '12:00:00' AND '18:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.departure_time BETWEEN '12:00:00' AND '18:00:00'`
             operator = 'OR'
           } else {
             if (departure[i] == 'malam') {
-              sql += ` ${operator} flights.departure_time BETWEEN '18:00:00' AND '24:00:00'`
+              sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.departure_time BETWEEN '18:00:00' AND '24:00:00'`
               operator = 'OR'
             }
 
           }
         }
         operator = 'AND'
+        sql += `)`
       }
 
       if (arrival.length > 0) {
         // console.log(departure);
         operator = 'AND'
+        let kurungBuka = '('
         for (let i = 0; i < arrival.length; i++) {
           if (arrival[i] == 'dinihari') {
-            sql += ` ${operator}  flights.arrival_time BETWEEN '00:00:00' AND '06:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.arrival_time BETWEEN '00:00:00' AND '06:00:00'`
             operator = 'OR'
           } else if (arrival[i] == 'pagi') {
-            sql += ` ${operator} flights.arrival_time BETWEEN '06:00:00' AND '12:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.arrival_time BETWEEN '06:00:00' AND '12:00:00'`
             operator = 'OR'
           } else if (arrival[i] == 'sore') {
-            sql += ` ${operator} flights.arrival_time BETWEEN '12:00:00' AND '18:00:00'`
+            sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.arrival_time BETWEEN '12:00:00' AND '18:00:00'`
             operator = 'OR'
           } else {
             if (arrival[i] == 'malam') {
-              sql += ` ${operator} flights.arrival_time BETWEEN '18:00:00' AND '24:00:00'`
+              sql += ` ${operator} ${operator === 'AND' ? kurungBuka : '' } flights.arrival_time BETWEEN '18:00:00' AND '24:00:00'`
               operator = 'OR'
             }
 
           }
         }
         operator = 'AND'
+        sql += `)`
+      }
+
+      if (type) {
+        sql += ` AND (flights.class ILIKE '${type}')`;
       }
 
       if(min && max){
         // console.log(min);
         // console.log(max);
         operator = 'AND'
-        sql += ` ${operator} flights.price BETWEEN ${min} AND ${max}`
+        sql += ` ${operator} (flights.price BETWEEN ${min} AND ${max})`
       }
 
-      if (type) {
-        sql += ` AND flights.class ILIKE '${type}'`;
-      }
-
+      // search by destination
       if (date) {
         // console.log(date);
-        sql += ` AND flights.departure_date = '${date}'`
+        sql += ` AND (flights.departure_date = '${date}')`
       }
-
       if (origin) {
-        sql += ` AND origin.city_name ILIKE '${origin}'`;
+        sql += ` AND (origin.city_name ILIKE '${origin}')`;
       }
 
       if (destination) {
-        sql += ` AND destination.city_name ILIKE '${destination}'`;
+        sql += ` AND (destination.city_name ILIKE '${destination}')`;
       }
 
       pool.query(sql, (err, result) => {
