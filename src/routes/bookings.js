@@ -5,7 +5,7 @@ const router = express.Router();
 
 router
     .post('/', protect, bookingsController.createBooking)
-    .get('/', bookingsController.getCustomerBookings)
+    .get('/', protect, bookingsController.getCustomerBookings)
     .get('/:id', protect, bookingsController.getDetailBooiking)
 
 module.exports = router

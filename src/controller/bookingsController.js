@@ -35,7 +35,7 @@ const bookingsController = {
 
     getCustomerBookings: async (req, res, next) => {
         try {
-            const userId = 'wahyudwi'
+            const userId = req.decoded.id
             const bookings = await bookingsModel.getCustomerBookings(userId)
             const newData = bookings.rows.map((item)=>{
                 return {
