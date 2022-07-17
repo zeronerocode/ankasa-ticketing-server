@@ -64,7 +64,7 @@ const bookingsController = {
                 }
             })
 
-            response(res, newData, 200, 'GET Detail Success')
+            response(res, newData[0], 200, 'GET Detail Success')
         } catch (error) {
             console.log(error);
             next(errorMessage)
