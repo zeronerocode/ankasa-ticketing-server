@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const { findEmail, insert, deleteUser } = require("../models/users");
 const { response } = require("../helper/response");
+const {sendEmail, forgotPassword} = require('../helper/mail')
 const jwt = require("jsonwebtoken");
 const authHelper = require("../middleware/auth");
 
@@ -26,7 +27,7 @@ const register = async (req, res, next) => {
       isActive : false
     };
     await insert(data);
-    // sendEmail(email);
+    sendEmail(data);
     response(res, data, 201, "you are successfully registered");
   } catch (error) {
     console.log(error);
@@ -90,9 +91,33 @@ const refreshToken = (req, res) => {
   };
   response(res, result, 200, "you are successfully logged in");
 };
+
+const forgetPassword = async(req, res, next)=>{
+  try {
+      const {email} = req.body
+      const data = {
+          email
+      }
+      const {rows: [user]} = await findEmail(email);
+      console.log(user.email);
+      if(!user){
+          next(createError[400]('Email doesn\'t exist'))
+      }else{
+          await forgotPassword(data)
+          res.status(200).json({
+              message: 'check your email'
+          })
+      }
+  } catch (error) {
+      console.log(error);
+      next(createError[500]('internal server error'))
+  }
+}
+
 module.exports = {
   register,
   login,
   delUser,
-  refreshToken
+  refreshToken,
+  forgetPassword
 };
