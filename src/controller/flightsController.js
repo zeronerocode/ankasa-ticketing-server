@@ -22,7 +22,7 @@ const flightsController = {
         departure,
         arrival,
         fasilitas,
-        price,
+        // price,
         type,
         date,
         min,
@@ -38,12 +38,12 @@ const flightsController = {
       const arriveFilter = arrival ? arrival.split('.') : "";
       const fasilitasFilter = fasilitas ? fasilitas.split('.') : "";
       const departureDate = date || 0
-      const priceFilter = price ? price : "";
+      // const priceFilter = price ? price : "";
       const sortByFilter = sortBy || "";
       const originFilter = origin || "";
       const destinationFilter = destination || "";
-      const minPrice = min || 10000
-      const maxPrice = max || 200000
+      const minPrice = min || 0
+      const maxPrice = max || 0
 
       const result = await flightsModel.getAllProduct(
         limit,
