@@ -72,8 +72,8 @@ const forgotPassword = async (data) => {
         port: 465,
         secure: true,// true for 465, false for other ports
         auth: {
-          user: 'avtur.team@gmail.com', // generated ethereal user
-          pass: 'nkbkkjrehqcjjxln', // generated ethereal password
+          user: process.env.G_ACCOUNT, // generated ethereal user
+          pass: process.env.G_PASS, // generated ethereal password
         },
       });
     const expiresIn = {
