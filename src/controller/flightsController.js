@@ -29,8 +29,8 @@ const flightsController = {
         max
       } = req.query;
       // console.log(typeof(transit));
-      // console.log(departure);
-      // console.log(airline);
+      console.log(min);
+      console.log(max);
       // console.log(transit.split('%'));
       const transitFilter = transit ? transit.split('.') : "";
       const airlineFilter = airline ? airline.split('|') : "";
@@ -42,8 +42,8 @@ const flightsController = {
       const sortByFilter = sortBy || "";
       const originFilter = origin || "";
       const destinationFilter = destination || "";
-      const minPrice = min || 0
-      const maxPrice = max || 0
+      const minPrice = min || 10000
+      const maxPrice = max || 200000
 
       const result = await flightsModel.getAllProduct(
         limit,
@@ -56,7 +56,6 @@ const flightsController = {
         departureFilter,
         arriveFilter,
         fasilitasFilter,
-        priceFilter,
         type,
         departureDate,
         minPrice,
@@ -72,7 +71,6 @@ const flightsController = {
         departureFilter,
         arriveFilter,
         fasilitasFilter,
-        priceFilter,
         type,
         departureDate,
         minPrice,

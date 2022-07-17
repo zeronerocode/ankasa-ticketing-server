@@ -3,7 +3,8 @@ const pool = require("../config/db");
 // let op = 'AND';
 
 const flightsModel = {
-  getAllProduct: (limit,
+  getAllProduct: (
+    limit,
     offset,
     transit,
     airline,
@@ -12,11 +13,12 @@ const flightsModel = {
     destination,
     departure,
     arrival,
-    fasilitas, 
+    fasilitas,
     type, 
     date,
     min,
-    max) =>
+    max
+    ) =>
     new Promise((resolve, reject) => {
       let sql = `SELECT flights.id, flights.airline_id, flights.departure_time, flights.duration,
       flights.arrival_time, flights.code, flights.class, flights.departure_date, flights.direct,
@@ -172,9 +174,9 @@ const flightsModel = {
         sql += ` AND (flights.class ILIKE '${type}')`;
       }
 
+      console.log(min);
+      console.log(max);
       if(min && max){
-        // console.log(min);
-        // console.log(max);
         operator = 'AND'
         sql += ` ${operator} (flights.price BETWEEN ${min} AND ${max})`
       }
@@ -236,7 +238,6 @@ const flightsModel = {
     departure, 
     arrival, 
     fasilitas, 
-    price, 
     type,
     date,
     min,
@@ -393,8 +394,6 @@ const flightsModel = {
       }
 
       if(min && max){
-        // console.log(min);
-        // console.log(max);
         operator = 'AND'
         sql += ` ${operator} (flights.price BETWEEN ${min} AND ${max})`
       }
