@@ -110,7 +110,7 @@ const flightsController = {
       console.log(id);
       const {rows} = await flightsModel.flightDetail(id)
 
-      return response(res, rows, 200, "get detail flights success");
+      return response(res, rows[0], 200, "get detail flights success");
     } catch (error) {
       console.log(error);
       next(error)

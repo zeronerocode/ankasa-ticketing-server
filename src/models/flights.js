@@ -29,7 +29,7 @@ const flightsModel = {
       INNER JOIN airlines ON flights.airline_id = airlines.id
       INNER JOIN countries AS origin ON flights.departure_city = origin.id
       INNER JOIN countries AS destination ON flights.arrival_city = destination.id
-      WHERE flights.stock >= ${1}`;
+      WHERE flights.stock >= ${1} AND flights.is_active = ${1}`;
       // if (transit === "0") {
       //   sql += ` AND flights.direct = ${1}`;
       // }
@@ -247,7 +247,7 @@ const flightsModel = {
       INNER JOIN airlines ON flights.airline_id = airlines.id
       INNER JOIN countries AS origin ON flights.departure_city = origin.id
       INNER JOIN countries AS destination ON flights.arrival_city = destination.id
-      WHERE flights.stock >= ${1}`;
+      WHERE flights.stock >= ${1} AND flights.is_active = ${1}`;
 
       // if (transit === "0") {
       //   sql += ` AND flights.direct = ${1}`;
