@@ -1,9 +1,9 @@
 const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
-const { findEmail, insert, deleteUser } = require("../models/users");
+const { findEmail, insert, checkIdUser, activate, resetPassword } = require("../models/users");
 const { response } = require("../helper/response");
-const {sendEmail, forgotPassword} = require('../helper/mail')
+const { sendEmail, forgotPassword } = require('../helper/mail')
 const jwt = require("jsonwebtoken");
 const authHelper = require("../middleware/auth");
 
@@ -24,7 +24,7 @@ const register = async (req, res, next) => {
       email,
       password: hashPassword,
       name,
-      isActive : false
+      isActive: false
     };
     await insert(data);
     sendEmail(data);
@@ -54,7 +54,7 @@ const login = async (req, res, next) => {
       name: user.name,
       id: user.id
     };
-    
+
     // generate token
     user.token = authHelper.generateToken(payload);
     user.refreshToken = authHelper.gerateRefreshToken(payload);
@@ -64,18 +64,6 @@ const login = async (req, res, next) => {
     console.log(error);
     next(new createError.InternalServerError());
   }
-};
-
-const delUser = (req, res, next) => {
-  const email = req.params.email;
-  deleteUser(email)
-  .then(() => {
-    response(res, email, 201, "User Deleted");
-  })
-  .catch((error) => {
-    console.log(error);
-    next(new createError.InternalServerError());
-  });
 };
 
 const refreshToken = (req, res) => {
@@ -92,32 +80,76 @@ const refreshToken = (req, res) => {
   response(res, result, 200, "you are successfully logged in");
 };
 
-const forgetPassword = async(req, res, next)=>{
+const forgetPassword = async (req, res, next) => {
   try {
-      const {email} = req.body
-      const data = {
-          email
-      }
-      const {rows: [user]} = await findEmail(email);
-      console.log(user.email);
-      if(!user){
-          next(createError[400]('Email doesn\'t exist'))
-      }else{
-          await forgotPassword(data)
-          res.status(200).json({
-              message: 'check your email'
-          })
-      }
+    const { email } = req.body
+    const data = {
+      email
+    }
+    const { rows: [user] } = await findEmail(email);
+    console.log(user.email);
+    if (!user) {
+      next(createError[400]('Email doesn\'t exist'))
+    } else {
+      await forgotPassword(data)
+      res.status(200).json({
+        message: 'check your email'
+      })
+    }
   } catch (error) {
-      console.log(error);
-      next(createError[500]('internal server error'))
+    console.log(error);
+    next(createError[500]('internal server error'))
+  }
+}
+
+const activation = async (req, res, next) => {
+  try {
+    // const token = req.params.token
+    const id = req.params.id
+    const strId = id.toString()
+    console.log("id => ",strId);
+    const { rowCount: user } = await checkIdUser(strId)
+    console.log(user);
+    await activate(id)
+    res.redirect('')
+  } catch (error) {
+    console.log(error);
+    next(createError[500]('Something Wrong'))
+  }
+
+}
+
+const resetPass = async (req, res, next) => {
+  try {
+    const { email } = jwt.verify(req.params.token, process.env.SECRET_KEY_JWT)
+    console.log(email);
+    const { rowCount: [user] } = await findEmail(email)
+    if (user) {
+      const route = 'users'
+      console.log(route);
+      const { password } = req.body
+      const salt = bcrypt.genSaltSync(10)
+      const hash = bcrypt.hashSync(password, salt)
+      await resetPassword(route, hash, email)
+      res.status(200).json({
+        message: 'password updated'
+      })
+    } else {
+      res.status(400).json({
+        message: 'Account doesn\'t exist'
+      })
+    }
+  } catch (error) {
+    console.log(error);
+    next(createError[500]('somethong\'s wrong'))
   }
 }
 
 module.exports = {
   register,
   login,
-  delUser,
   refreshToken,
-  forgetPassword
+  forgetPassword,
+  activation,
+  resetPass,
 };

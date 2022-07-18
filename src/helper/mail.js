@@ -53,7 +53,7 @@ const sendEmail = async(data)=>{
         </head>
         <body>
             <div class="container">
-                <a href="http://localhost:5000/v1/auth/activate/${token}/${data.id}">klik aktif</a>
+                <a href="http://localhost:5000/v1/users/activate/${token}/${data.id}">klik aktif</a>
             </div>
         </body>
         </html>`, // html body
@@ -84,7 +84,7 @@ const forgotPassword = async (data) => {
         from: '"Ankasa Ticketing" <avtur.team@gmail.com>',
         to: data.email,
         subject: 'Reset Pasword',
-        text: `http://localhost:5000/v1/auth/forgot/${token}`,
+        text: `http://localhost:5000/v1/users/forgot/${token}`,
     })
     console.log('Message sent: %s', info.messageId)
 }

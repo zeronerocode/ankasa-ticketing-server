@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { register, login, refreshToken, forgetPassword} = require('../controller/authController.js')
+const { register, login, refreshToken, forgetPassword, activation, resetPass} = require('../controller/authController.js')
 // const { protect } = require('../middleware/auth.js')
 // const { protect } = require('../middlewares/auth.js')
 
@@ -9,7 +9,7 @@ router
   .post('/login', login)   
   .post('/refresh-token', refreshToken)
   .post('/forgotpassword', forgetPassword)
-// .get('/', protect, getUsers)
-//   .delete('/:id', deleteUser)
+  .get('/activate/:token/:id', activation)
+  .put('/forgot/:token', resetPass)
 
 module.exports = router
