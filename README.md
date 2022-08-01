@@ -156,11 +156,11 @@ Contributions are what make the open source community such an amazing place to b
 
 :rocket: [`Frontend Admin Ankasa Tiketing`](https://github.com/wahyuwww/Ankasa-Ticketing-FE)
 
-:rocket: [`Web Service`](avtur-ankasa-ticketing.herokuapp.com/)
+:rocket: [`Web Service`](https://avtur-ankasa-ticketing.herokuapp.com/)
 
 :rocket: [`Demo Ankasa Tiketing`](https://angkasa-tiketing.netlify.app/)
 
-:rocket: [`Demo Admin Ankasa Tiketing`](admin-angkasa-group.netlify.app/)
+:rocket: [`Demo Admin Ankasa Tiketing`](https://admin-angkasa-group.netlify.app/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
