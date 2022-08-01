@@ -160,7 +160,7 @@ Contributions are what make the open source community such an amazing place to b
 
 :rocket: [`Demo Ankasa Tiketing`](https://angkasa-tiketing.netlify.app/)
 
-:rocket: [`Demo Admin Ankasa Tiketing`](admin-angkasa-group.netlify.app/)
+:rocket: [`Demo Admin Ankasa Tiketing`](https://admin-angkasa-group.netlify.app/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
